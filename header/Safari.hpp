@@ -2,5 +2,5 @@
 #define _SAFARI
 
 
-/* le jeu safari, qui héritera de Jeux*/
+/* le jeu safari, qui héritera de Jeux */
 #endif
