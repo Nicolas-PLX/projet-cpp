@@ -55,9 +55,9 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
     if (p->getType() == "pion"){
         if(checkDeplacementPion(j,x1,y1,x2,y2)){
             suppressionPiece(x1,y1,x2,y2);
-
             /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
-            damier[x2][y2]->setPiece(damier[x1][y1]->getPiece());
+            damier[x2][y2]->setPiece(p);
+
             damier[x1][y1]->setPiece(nullptr);
 
             char s = damier[x2][y2]->getPiece()->getSymbole();

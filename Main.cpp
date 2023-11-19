@@ -3,6 +3,7 @@
 #include "header/Case.hpp"
 #include "header/Piece.hpp"
 #include "header/Dames.hpp"
+#include "header/Partie.hpp"
 #include <iostream>
 
 using namespace std;
@@ -20,10 +21,8 @@ int main(){
     cout << p << endl;
     */
 
-   Dames d = Dames{"abc","def"};
-
-   d.remplirPlateau();
-
-   cout << *d.getPlateau() << endl;
+   Dames *d = new Dames();
+   Partie *p = new Partie(d,"abc","def");
+   p->launch();
 
 }

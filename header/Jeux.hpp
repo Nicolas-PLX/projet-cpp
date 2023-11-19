@@ -8,15 +8,15 @@
 class Jeux{
     protected:
     Plateau * plateau;
-    Joueur * joueur_1;
-    Joueur * joueur_2;
+
     
 
     public:
     Jeux(int n);
     Plateau * getPlateau() const;
-    Joueur * getJoueur1() const;
-    Joueur * getJoueur2() const;
+    virtual void remplirPlateau(Joueur *j1, Joueur *j2);
+    virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2);
+    
 };
 
 

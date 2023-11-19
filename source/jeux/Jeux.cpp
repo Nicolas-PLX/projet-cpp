@@ -4,8 +4,6 @@
 
 Jeux::Jeux(int n){
     plateau = new Plateau{n};
-    joueur_1 = new Joueur{"abc"};
-    joueur_2 = new Joueur{"def"};
 }
 
 
@@ -14,11 +12,12 @@ Plateau * Jeux::getPlateau() const{
     return plateau;
 }
 
-Joueur * Jeux::getJoueur1() const{
-    return joueur_1;
+void Jeux::remplirPlateau(Joueur *j1, Joueur *j2){ //todo
+    cout << "remplissage ..." << endl;
 }
 
-Joueur * Jeux::getJoueur2() const{
-    return joueur_2;
+bool Jeux::deplacement(Joueur *joueur, int x1, int y1, int x2, int y2){ //todo
+    return false;
 }
+
 

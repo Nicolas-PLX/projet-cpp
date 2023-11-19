@@ -5,15 +5,12 @@
 
 
 
-Dames::Dames(string ps1, string ps2) : Jeux(10){
-    joueur_1 = new Joueur(ps1);
-    joueur_2 = new Joueur(ps2);
-}
+Dames::Dames() : Jeux(10){}
 
 
-void Dames::remplirPlateau(){
+void Dames::remplirPlateau(Joueur *j1, Joueur *j2){
     cout << "je vais ici" << endl;
-    this->getPlateau()->remplirPlateauDames(this->getJoueur1(),this->getJoueur2());
+    this->getPlateau()->remplirPlateauDames(j1,j2);
 }
 
 bool Dames::deplacement(Joueur * j, int x1, int y1, int x2, int y2){

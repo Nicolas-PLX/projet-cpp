@@ -1,7 +1,7 @@
 CPP=g++ --std=c++11 -Wall
 CCO= $(CPP) -c $<
 
-OBJECTS = Main.o Plateau.o Case.o Piece.o Jeux.o Dames.o Joueur.o
+OBJECTS = Main.o Plateau.o Case.o Piece.o Jeux.o Dames.o Joueur.o Partie.o
 
 all: $(OBJECTS)
 	$(CPP) -o programme $(OBJECTS)
@@ -21,7 +21,8 @@ Dames.o : source/jeux/Dames.cpp header/Dames.hpp header/Jeux.hpp
 	$(CCO)
 Joueur.o : source/joueur/Joueur.cpp header/Joueur.hpp 
 	$(CCO)
-
+Partie.o : source/Partie.cpp header/Partie.hpp header/Jeux.hpp header/Joueur.hpp header/Dames.hpp
+	$(CCO)
 
 
 clean : 
