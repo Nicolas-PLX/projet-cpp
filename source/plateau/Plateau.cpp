@@ -52,7 +52,12 @@ void Plateau::remplirPlateauDames(Joueur *j1, Joueur *j2){
 
 bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
     Piece *p = damier[x1][y1]->getPiece();
+    if (p->getProprietaire()->getId() != j->getId()){
+        cout << "je vais ici : false" << endl;
+        return false;
+    }
     if (p->getType() == "pion"){
+        cout << "je vais ici aussi : pion" << endl;
         if(checkDeplacementPion(j,x1,y1,x2,y2)){
             suppressionPiece(x1,y1,x2,y2);
             /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
@@ -62,9 +67,12 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
 
             char s = damier[x2][y2]->getPiece()->getSymbole();
             transformationDame(s,x2,y2);
+
+            return true;
         }
         
     }
+    return false;
 }
 
 bool Plateau::checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2){
@@ -110,14 +118,25 @@ void Plateau::transformationDame(char s,int x, int y){
 }
 
 void Plateau::suppressionPiece(int x1,int y1,int x2,int y2){
-        delete damier[(x1+x2)/2][(y1+y2)/2]->getPiece();
-        damier[(x1+x2)/2][(y1+y2)/2]->setPiece(nullptr);
+    Piece *p = damier[(x1+x2)/2][(y1+y2)/2]->getPiece();
+    cout << "je vais ici avant le delete" << endl;
+    cout << *p << endl;
+    if(p != nullptr){
+        cout << "je vais ici : delete" << endl;
+        delete p;
+        //damier[(x1+x2)/2][(y1+y2)/2]->setPiece(nullptr);
+    }
 }
 
 
 std::ostream& operator<<(std::ostream &out, const Plateau& plateau){
     vector<vector<Case *>> d = plateau.getDamier();
+    for (int i = 0; i < plateau.getTaille(); i++){
+        out << "  " << i << " ";
+    }
+    out << endl;
     for(int i = 0; i < plateau.getTaille(); i++){
+        out << i;
         for(int j = 0; j < plateau.getTaille();j++){
             out << "| " << *d[i][j] << " ";
         } 

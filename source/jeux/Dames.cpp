@@ -18,3 +18,7 @@ bool Dames::deplacement(Joueur * j, int x1, int y1, int x2, int y2){
     return this->getPlateau()->deplacementDames(j,x1,y1,x2,y2);
 }
 
+bool Dames::verifFinDePartie(){
+    return (noir <= 0 || blanc <= 0);
+}
+

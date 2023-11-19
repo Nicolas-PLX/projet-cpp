@@ -4,6 +4,7 @@
 #include "Jeux.hpp"
 #include "Joueur.hpp"
 #include "Dames.hpp"
+#include <sstream>
 #include <string>
 
 /* CLasse Partie : cette classe consistera à prendre un jeu, et de lancer une partie de ce jeu. */
