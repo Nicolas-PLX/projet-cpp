@@ -26,7 +26,11 @@ class Plateau{
     bool checkDeplacementDame(Joueur *j, int x1, int y1, int x2, int y2);
     void suppressionPiece(int x1,int y1,int x2,int y2);
     void transformationDame(char s,int x,int y);
+    bool checkPiece(int x, int y);
 };
+
+    bool checkSaut(int x1, int y1, int x2, int y2);
+
 
 std::ostream& operator<<(std::ostream &os, const Plateau& plateau);
 

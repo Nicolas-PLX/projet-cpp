@@ -59,9 +59,15 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
     if (p->getType() == "pion"){
         cout << "je vais ici aussi : pion" << endl;
         if(checkDeplacementPion(j,x1,y1,x2,y2)){
-            suppressionPiece(x1,y1,x2,y2);
+            if (checkSaut(x1,y1,x2,y2)){
+                suppressionPiece(x1,y1,x2,y2);
+            }
             /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
+            //cout << "affichage vide :" << *damier[x2][y2]->getPiece() << endl;
+            cout << "coucou" << endl;
             damier[x2][y2]->setPiece(p);
+            cout << "affichage case x2 y2 :" << *damier[x2][y2]->getPiece() << endl;
+            cout << *p << endl;
 
             damier[x1][y1]->setPiece(nullptr);
 
@@ -71,6 +77,8 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
             return true;
         }
         
+    } else if (p->getType() == "dame"){
+        return true; //todo
     }
     return false;
 }
@@ -117,15 +125,38 @@ void Plateau::transformationDame(char s,int x, int y){
     }
 }
 
+/*Fonction qui regarde s'il y a une pièce à une position donnée*/
+bool Plateau::checkPiece(int x, int y){
+    cout << *damier[x][y]->getPiece()->getProprietaire() << endl;
+    cout << *damier[x][y]->getPiece() << endl;
+    if(damier[x][y]->getPiece()){return true;}
+    return false;
+}
+
 void Plateau::suppressionPiece(int x1,int y1,int x2,int y2){
     Piece *p = damier[(x1+x2)/2][(y1+y2)/2]->getPiece();
+    cout << "coordonnée :" << (x1+x2) / 2 << " " << (y1+y2) / 2 << endl;
+    cout << "valeur :" << x1 << " " << x2 << " " << y1 << " " << y2 << endl;
     cout << "je vais ici avant le delete" << endl;
     cout << *p << endl;
-    if(p != nullptr){
+    if(p){
         cout << "je vais ici : delete" << endl;
         delete p;
         //damier[(x1+x2)/2][(y1+y2)/2]->setPiece(nullptr);
     }
+}
+
+/* Fonction qui regarde si c'est un saut ou un simple déplacement*/
+bool checkSaut(int x1, int y1, int x2, int y2){
+        cout << "valeur :" << x1 << " " << x2 << " " << y1 << " " << y2 << endl;
+
+    if ((x2 == x1 + 2 && y2 == y1 + 2) // déplacement -> Diagonale Bas Droit
+    || (x2 == x1 +2 && y2 == y1 - 2) // déplacement -> Diagonale Bas Gauche
+    || (x2 == x1 - 2 && y2 == y1 +2) // déplacement -> Diagonale Haut Droit
+    || (x2 == x1 - 2 && y2 == y1 - 2)){
+        return true;
+    }
+    return false;
 }
 
 

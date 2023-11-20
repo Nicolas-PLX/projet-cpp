@@ -26,4 +26,4 @@ Partie.o : source/Partie.cpp header/Partie.hpp header/Jeux.hpp header/Joueur.hpp
 
 
 clean : 
-	@rm -f *.o test
+	@rm -f *.o programme

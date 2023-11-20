@@ -22,10 +22,10 @@ void Partie::launch(){
     while(true){ /* tmp*/
         cout << "Tour " << tour << endl;
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_1 << endl;
+        cout << "Au tour de " << *joueur_1 << endl;
         jouerTour(joueur_1);
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_2 << endl;
+        cout << "Au tour de " << *joueur_2 << endl;
         jouerTour(joueur_2);
     }
 }
@@ -55,7 +55,7 @@ void Partie::jouerTour(Joueur *j1){
                 } break;
             }
                 case 2: {
-                cout << type_de_jeu->getPlateau() << endl; break;
+                cout << *type_de_jeu->getPlateau() << endl; break;
                 }
 
         }
