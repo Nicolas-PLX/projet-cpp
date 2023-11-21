@@ -52,6 +52,8 @@ void Plateau::remplirPlateauDames(Joueur *j1, Joueur *j2){
 
 bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
     vector<Piece *> piece_suppr = vector<Piece *>(); /*Liste des pièces a supprimer*/
+    vector<pair<int, int>> coord_piece_suppr = vector<pair<int, int>>(); //Coordonnées des vecteurs supprimés
+
     Piece *p = damier[x1][y1]->getPiece();
     if (p->getProprietaire()->getId() != j->getId()){
         cout << "je vais ici : false" << endl;
@@ -61,7 +63,7 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
         cout << "je vais ici aussi : pion" << endl;
         if(checkDeplacementPion(j,x1,y1,x2,y2)){
             if (checkSaut(x1,y1,x2,y2)){
-                suppressionPiece(piece_suppr,(x1+x2)/2,(y1+y2)/2);
+                suppressionPiece(piece_suppr,(x1+x2)/2,(y1+y2)/2,coord_piece_suppr);
             }
             /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
             damier[x2][y2]->setPiece(p);
@@ -76,7 +78,9 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
             for (Piece * p : piece_suppr){
                 cout << *p << endl;
             }
-            vidage(piece_suppr);
+            if(!piece_suppr.empty()){
+                vidage(piece_suppr,coord_piece_suppr);
+            }
             cout << "après vidage" << endl;
             for (Piece * p : piece_suppr){
                 cout << *p << endl;
@@ -93,6 +97,9 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
 }
 
 bool Plateau::checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2){
+    if(!checkDeplacementJoueur(x1,y1,x2,y2)){
+        return false;
+    }
     /* Cas où c'est un simple déplacement*/
     if ((x2 == x1 + 1 && y2 == y1 + 1) // déplacement -> Diagonale Bas Droit
     || (x2 == x1 +1 && y2 == y1 - 1) // déplacement -> Diagonale Bas Gauche
@@ -120,6 +127,21 @@ bool Plateau::checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2){
     return false;
 }
 
+bool Plateau::checkDeplacementJoueur(int x1, int y1, int x2, int y2){ //Un pion d'un joueur ne peut qu'aller tout droit en face de lui
+        //On regarde d'abord la couleur du pion qui essaye d'avancer
+        char s = damier[x1][y1]->getPiece()->getSymbole();
+        if(s == 'N'){ //Cas joueur du haut
+            if (x1 < x2){
+                return true;
+            }
+        } else {
+            if (x1 > x2){
+                return true;
+            }
+        }
+        return false;
+}
+
 void Plateau::transformationDame(char s,int x, int y){
     if (s == 'N'){ // Joueur qui commence en haut, donc le pion doit se trouver sur la dernière ligne
         if (x == taille-1){
@@ -142,13 +164,13 @@ bool Plateau::checkPiece(int x, int y){
     return false;
 }
 
-void Plateau::suppressionPiece(vector<Piece *> vp,int x,int y){
+void Plateau::suppressionPiece(vector<Piece *>& vp,int x,int y,vector<pair<int, int>>& coords){
     Piece *p = damier[x][y]->getPiece();
-    //cout << "coordonnée :" << (x1+x2) / 2 << " " << (y1+y2) / 2 << endl;
-    //cout << "valeur :" << x1 << " " << x2 << " " << y1 << " " << y2 << endl;
-    //cout << "je vais ici avant le delete" << endl;
-    //cout << *p << endl;
+    cout << "l'ajout a-t-il été fait ?" << endl;
     vp.push_back(p);
+    pair<int,int> np(x,y);
+    coords.push_back(np);
+  
 }
 
 /* Fonction qui regarde si c'est un saut ou un simple déplacement*/
@@ -164,9 +186,13 @@ bool checkSaut(int x1, int y1, int x2, int y2){
     return false;
 }
 
-void vidage(vector<Piece *> vp){
+void Plateau::vidage(vector<Piece *>& vp, vector<pair<int, int>>& coords){
     for(Piece *p : vp){
         delete p;
+    }
+    vp.clear();
+    for(pair<int,int> p : coords){
+        damier[p.first][p.second]->setPiece(nullptr);
     }
 }
 

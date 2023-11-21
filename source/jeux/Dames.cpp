@@ -9,7 +9,6 @@ Dames::Dames() : Jeux(10){}
 
 
 void Dames::remplirPlateau(Joueur *j1, Joueur *j2){
-    cout << "je vais ici" << endl;
     this->getPlateau()->remplirPlateauDames(j1,j2);
 }
 
