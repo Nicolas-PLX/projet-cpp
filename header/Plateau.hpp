@@ -24,12 +24,13 @@ class Plateau{
     bool deplacementDames(Joueur *j, int x1, int y1, int x2, int y2);
     bool checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2);
     bool checkDeplacementDame(Joueur *j, int x1, int y1, int x2, int y2);
-    void suppressionPiece(int x1,int y1,int x2,int y2);
+    void suppressionPiece(vector<Piece *> vp,int x,int y);
     void transformationDame(char s,int x,int y);
     bool checkPiece(int x, int y);
 };
 
     bool checkSaut(int x1, int y1, int x2, int y2);
+    void vidage(vector<Piece *> vp);
 
 
 std::ostream& operator<<(std::ostream &os, const Plateau& plateau);
