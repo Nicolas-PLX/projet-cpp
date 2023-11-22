@@ -9,6 +9,9 @@ Piece::Piece(char s, Joueur *j, string t){
     type = t;
 }
 
+Piece::Piece(Couleur couleur, Joueur *j, bool espion) :couleur(couleur),proprietaire(j), espion(espion){}
+
+
 char Piece::getSymbole() const{
     return symbole;
 }
@@ -29,3 +32,18 @@ ostream& operator<<(ostream &out, const Piece& piece){
     out << piece.getSymbole();
     return out;
 }
+
+bool Piece::estEspion() const{
+    return espion;
+}
+
+Couleur Piece::getCouleur() const{
+    return couleur;
+}
+
+/*
+ostream& operator<<(ostream &out, const Piece& pion){
+    out << pion.getCouleur() <<" Espion : "<< pion.estEspion();
+    return out;
+}
+*/

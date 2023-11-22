@@ -144,3 +144,24 @@ std::ostream& operator<<(std::ostream &out, const Plateau& plateau){
     }
     return out;
 }
+
+//Partie Incognito
+void Plateau::remplirPlateauIncognito(Joueur *j1, Joueur *j2){
+    //remplir les pieces blanches
+    for(int i =0; i < taille; i++){
+        for( int j = i+2; j<i+4; j++){
+            damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
+        }
+    }
+    //le pion blanc
+    damier[0][2]->setPiece(new Piece{Couleur::Blanc,j1,true});
+    //remplir les pieces noirs
+    for(int i =2; i < taille; i++){
+        for( int j = 0; j<i; j++){
+            damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
+        }
+    }
+    //le pion noir
+    damier[4][2]->setPiece(new Piece{Couleur::Blanc,j1,true});
+
+}
