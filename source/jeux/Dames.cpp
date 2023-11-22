@@ -21,3 +21,20 @@ bool Dames::verifFinDePartie(){
     return (noir <= 0 || blanc <= 0);
 }
 
+void Dames::majScore(){
+    vector<vector<Case *>> board = plateau->getDamier();
+    int n = 0;
+    int b = 0;
+    for(int i = 0; i < plateau->getTaille();i++){
+        for(int j = 0; j < plateau->getTaille();j++){
+            if(board[i][j]->getPiece()->getSymbole() == 'N'){n++;} else {b++;}
+        }
+    }
+    if(n <= noir){noir = n;}
+    if (b <= blanc){blanc = b;}
+}
+
+void Dames::matchNul(){
+    noir = 0; blanc = 0;
+}
+

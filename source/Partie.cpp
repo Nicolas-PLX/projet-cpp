@@ -19,7 +19,7 @@ Joueur * Partie::getJoueur2() const{
 void Partie::launch(){
     int tour = 1;
     type_de_jeu->remplirPlateau(joueur_1,joueur_2);
-    while(true){ /* tmp*/
+    while(!type_de_jeu->verifFinDePartie()){ /* tmp*/
         cout << "Tour " << tour << endl;
         cout << *type_de_jeu->getPlateau() << endl;
         cout << "Au tour de " << *joueur_1 << endl;
@@ -29,15 +29,15 @@ void Partie::launch(){
         jouerTour(joueur_2);
     }
 }
-// TODO : corriger le bug d'affichage lors du déplacement
-// Vérifier que la pièce bouge bien, et non pas qu'elle se reconstruit
-// Ou que ce soit une nouvelle carrément
+
+
+
 void Partie::jouerTour(Joueur *j1){
     bool played = false;
     while(!played){
         string action = "";
         string coords = "";
-        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu" << endl;
+        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n2. Print : Affiche le plateau de jeu \n3. Match nul" << endl;
         cin >> action;
         int num_action = stoi(action);
 
@@ -58,9 +58,24 @@ void Partie::jouerTour(Joueur *j1){
                 cout << *type_de_jeu->getPlateau() << endl; break;
                 }
 
+                case 3: {
+                    if(matchNul(joueur_2)){
+                        type_de_jeu->matchNul();
+                    }
+                }
+
         }
     }
 }
+
+bool Partie::matchNul(Joueur *j2){
+        cout << "Votre adersaire vous propose un match nul (Insérer le chiffre). \n1. Non    2.Ok" << endl;
+        string rep;
+        cin >> rep;
+        int num = stoi(rep);
+        if (num == 2){return true;} else {return false;}
+}
+    
 
 
 
