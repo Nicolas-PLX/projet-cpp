@@ -149,19 +149,85 @@ std::ostream& operator<<(std::ostream &out, const Plateau& plateau){
 void Plateau::remplirPlateauIncognito(Joueur *j1, Joueur *j2){
     //remplir les pieces blanches
     for(int i =0; i < taille; i++){
-        for( int j = i+2; j<i+4; j++){
+        for( int j = i+2; j<i+4 && j< taille; j++){
             damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
         }
     }
     //le pion blanc
     damier[0][2]->setPiece(new Piece{Couleur::Blanc,j1,true});
-    //remplir les pieces noirs
+    //remplir les pieces noirs et blanches
     for(int i =2; i < taille; i++){
         for( int j = 0; j<i; j++){
             damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
+            damier[j][i]->setPiece(new Piece{Couleur::Noir,j2,false});
         }
     }
-    //le pion noir
-    damier[4][2]->setPiece(new Piece{Couleur::Blanc,j1,true});
-
+    //le pion noir et blanc
+    damier[2][4]->setPiece(new Piece{Couleur::Blanc,j1,true});
+    damier[2][0]->setPiece(new Piece{Couleur::Noir,j2,true});
 }
+
+bool Plateau::deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2){
+    //On verifie si les coordonnées sont valides
+    if(x1 < 0 || x2 < 0 || x1 > taille || x2 > taille ||y1 < 0 || y2 < 0 ||
+     y1 > taille || y2 > taille){
+        cout << "Coordonnées invalides!" << endl;
+        return false;
+    }
+    //On verifie s'il change de position ou il reste dans la meme case
+    if(x1 == x2 && y1 == y2){
+        cout << "Aucun déplacement!" << endl;
+        return false;
+    }
+    //On verifie s'il sagit de son propre pion
+    if (damier[x1][y1]->getPiece() == nullptr || damier[x1][y1]->getPiece()->getProprietaire()->getId() != j->getId()){
+        cout << "Vous n'avez de piece dans la case de depart!" <<endl;
+        return false;
+    }
+    //On verifie si la case d'arrivée est libre
+    if(damier[x2][y2]->getPiece() != nullptr){
+        cout << "La case d'arrivée est dèja occupée!" <<endl;
+        return false;
+    }
+    //On vérifie si le déplacement est autorisé selon les regles du Incognito
+    if(x1,y1,x2,y2){
+        Piece *p = damier[x1][y1]->getPiece();
+        damier[x2][y2]->setPiece(p);
+        damier[x1][y1]->setPiece(nullptr);
+    }
+    else{
+        cout << "Deplacement invalides!" << endl;
+        return false;
+    }
+}
+
+bool Plateau::checkDeplacementIncognito(int x1, int y1, int x2, int y2){
+    if(x1 == x2 && y1 != y2){
+        cout << "Déplacement vertical" << endl;
+    }
+    else if(y1 == y2 && x1 != x2){
+        cout << "Déplacement horizontal" << endl;
+    }
+    else if(abs(x1 - x2) == abs(y1 - y2)){
+        cout << "Déplacement diagonal" << endl;
+    }
+    else {
+        return false;
+    }
+
+    int x = x2 - x1;
+    int y = y2 - y1;
+
+    //On verifie la direction du déplacement
+    int dx = (x > 0)? 1 : ((x < 0)? -1 : 0);
+    int dy = (y > 0)? 1 : ((y < 0)? -1 : 0);
+
+    //On verifie s'il n y a pas une case occupée entre la case de depart et celle d'arrivée
+    for(int i = x1 + dx, j = y1 + dy ; i!= x2 || j != y2; i+=dx, j+=dy){
+        // on a trouvé une case occupé
+        if(damier[i][j]->getPiece() != nullptr){
+            return false;
+        }
+    }
+    return true;
+} 

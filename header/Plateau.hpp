@@ -27,6 +27,8 @@ class Plateau{
     void suppressionPiece(int x1,int y1,int x2,int y2);
     void transformationDame(char s,int x,int y);
     void remplirPlateauIncognito(Joueur *j1, Joueur *j2);
+    bool deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2);
+    bool checkDeplacementIncognito(int x1, int y1, int x2, int y2);
 
 };
 

@@ -9,3 +9,12 @@ void Incognito::remplirPlateau(Joueur *j1, Joueur *j2){
     cout << "je vais ici" << endl;
     this->getPlateau()->remplirPlateauIncognito(j1,j2);
 }
+
+bool Incognito::deplacement(Joueur * j, int x1, int y1, int x2, int y2){
+    return this->getPlateau()->deplacementIncognito(j,x1,y1,x2,y2);
+}
+
+//TODO
+bool verifFinDePartie(){
+ // faut faire d'abord la fonction d'interogation
+}
