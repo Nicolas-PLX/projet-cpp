@@ -56,9 +56,15 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
 
     Piece *p = damier[x1][y1]->getPiece();
     if (p->getProprietaire()->getId() != j->getId()){
-        cout << "je vais ici : false" << endl;
         return false;
     }
+    /*Déplacement en diagonale ou non*/
+    int deltaX = x2 - x1;
+    int deltaY = y2 - y1;
+    if(abs(deltaX) != abs(deltaY)){
+        return false;
+    }
+
     if (p->getType() == "pion"){
         cout << "je vais ici aussi : pion" << endl;
         if(checkDeplacementPion(j,x1,y1,x2,y2)){
@@ -74,55 +80,56 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
 
             char s = damier[x2][y2]->getPiece()->getSymbole();
             transformationDame(s,x2,y2);
-            cout << "contenu de piece suppr :" << endl;
-            for (Piece * p : piece_suppr){
-                cout << *p << endl;
-            }
             if(!piece_suppr.empty()){
                 vidage(piece_suppr,coord_piece_suppr);
             }
-            cout << "après vidage" << endl;
-            for (Piece * p : piece_suppr){
-                cout << *p << endl;
-            }
-
-
             return true;
         }
         
     } else if (p->getType() == "dame"){
-        return true; //todo
+        cout << "je vais ici : dame" << endl;
+        if (checkDeplacementDame(j,x1,y1,x2,y2))
+        {
+            
+        }
+        
     }
     return false;
 }
 
+//TODO : voir si on ne peut pas réécrire toute ses lignes en remplaçant tout cela par la valeur absolue des calculs xl et x2, y1 et y2.
 bool Plateau::checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2){
     if(!checkDeplacementJoueur(x1,y1,x2,y2)){
         return false;
     }
     /* Cas où c'est un simple déplacement*/
-    if ((x2 == x1 + 1 && y2 == y1 + 1) // déplacement -> Diagonale Bas Droit
-    || (x2 == x1 +1 && y2 == y1 - 1) // déplacement -> Diagonale Bas Gauche
-    || (x2 == x1 - 1 && y2 == y1 +1) // déplacement -> Diagonale Haut Droit
-    || (x2 == x1 - 1 && y2 == y1 - 1)){ // déplacement -> diagonale Haut Gauche
+    int deltaX = x2 - x1;
+    if(abs(deltaX == 1)){
         if (damier[x2][y2]->getPiece() == nullptr){
             return true;
         }
-    }  
-    /* Cas où nous sautons au dessus d'un autre pion */
-    /* On regarde d'abord si c'est bien un déplacement en diagonale valide*/
-    if ((x2 == x1 + 2 && y2 == y1 + 2) // déplacement -> Diagonale Bas Droit
-    || (x2 == x1 +2 && y2 == y1 - 2) // déplacement -> Diagonale Bas Gauche
-    || (x2 == x1 - 2 && y2 == y1 +2) // déplacement -> Diagonale Haut Droit
-    || (x2 == x1 - 2 && y2 == y1 - 2)){ // déplacement -> diagonale Haut Gauche
-        /* on regarde si la case est vide*/
+
+        /* Cas où le déplacement est un saut*/
+    } else if(abs(deltaX == 2)){
         if (damier[x2][y2]->getPiece() == nullptr){
         /* Puis on regarde si c'est un pion de l'autre joueur */
             if (damier[(x1+x2)/2][(y1+y2)/2]->getPiece()->getProprietaire() != j){
                 return true;
             }
         }
-        
+    }
+    return false;
+}
+
+bool Plateau::checkDeplacementDame(Joueur *j, int x1, int y1, int x2, int y2){
+    /* On regarde si le déplacement est en diagonale*/
+    int deltaX = x2 - x1;
+    int deltaY = y2 - y1;
+    if(abs(deltaX) != abs(deltaY)){
+        return false;
+    }
+    if(damier[x2][y2]->getPiece() == nullptr){
+        return true;
     }
     return false;
 }
