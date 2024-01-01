@@ -14,7 +14,11 @@ bool Incognito::deplacement(Joueur * j, int x1, int y1, int x2, int y2){
     return this->getPlateau()->deplacementIncognito(j,x1,y1,x2,y2);
 }
 
+bool Incognito::interroger(int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){
+    return this->getPlateau()->interroger(xQuestionneur,yQuestionneur,xInterrogateur,yInterrogateur);
+}
+
 //TODO
-bool verifFinDePartie(){
+bool Incognito::verifFinDePartie(){
  // faut faire d'abord la fonction d'interogation
 }

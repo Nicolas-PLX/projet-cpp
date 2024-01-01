@@ -145,7 +145,8 @@ std::ostream& operator<<(std::ostream &out, const Plateau& plateau){
     return out;
 }
 
-//Partie Incognito
+//Partie Incognito******************************************************************************************
+//Remplir la plateu au début de la partie
 void Plateau::remplirPlateauIncognito(Joueur *j1, Joueur *j2){
     //remplir les pieces blanches
     for(int i =0; i < taille; i++){
@@ -190,10 +191,11 @@ bool Plateau::deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2){
         return false;
     }
     //On vérifie si le déplacement est autorisé selon les regles du Incognito
-    if(x1,y1,x2,y2){
+    if(checkDeplacementIncognito(x1,y1,x2,y2)){
         Piece *p = damier[x1][y1]->getPiece();
         damier[x2][y2]->setPiece(p);
         damier[x1][y1]->setPiece(nullptr);
+        return true;
     }
     else{
         cout << "Deplacement invalides!" << endl;
@@ -231,3 +233,32 @@ bool Plateau::checkDeplacementIncognito(int x1, int y1, int x2, int y2){
     }
     return true;
 } 
+
+bool Plateau::sontVoisinsOrthogonaux(int x1, int y1, int x2, int y2) const {
+    return (std::abs(x1 - x2) == 1 && y1 == y2) || (x1 == x2 && std::abs(y1 - y2) == 1);
+}
+
+bool Plateau::interroger(int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){
+    if (!(xQuestionneur >= 0 && xQuestionneur < taille && yQuestionneur >= 0 && yQuestionneur < taille) || !(xInterrogateur >= 0 && xInterrogateur < taille && yInterrogateur >= 0 && yInterrogateur < taille)) {
+        std::cout << "Coordonnées invalides." << std::endl;
+        return false;
+    }
+    // Vérifier si les pions sont voisins orthogonaux
+    if (!sontVoisinsOrthogonaux(xQuestionneur, yQuestionneur, xInterrogateur, yInterrogateur)) {
+        std::cout << "Les pions ne sont pas voisins orthogonaux." << std::endl;
+        return false;
+    }
+    // Si le pion interrogé est un espion, le questionneur gagne
+    if (damier[xInterrogateur][yInterrogateur]->getPiece()->estEspion()) {
+        std::cout << "Le questionneur gagne !" << std::endl;
+        return true;
+    }
+    // Sinon, le questionneur perd son pion interrogateur
+    damier[xQuestionneur][yQuestionneur]->setPiece(nullptr);
+    // Si le pion interrogateur est l'espion du questionneur, le questionneur perd la partie
+    if (damier[xQuestionneur][yQuestionneur]->getPiece()->estEspion()) {
+        std::cout << "Le questionneur perd la partie !" << std::endl;
+        return true;
+    }
+    return true;
+}
