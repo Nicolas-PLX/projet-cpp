@@ -14,11 +14,15 @@ bool Incognito::deplacement(Joueur * j, int x1, int y1, int x2, int y2){
     return this->getPlateau()->deplacementIncognito(j,x1,y1,x2,y2);
 }
 
-bool Incognito::interroger(int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){
-    return this->getPlateau()->interroger(xQuestionneur,yQuestionneur,xInterrogateur,yInterrogateur);
+bool Incognito::interroger(Joueur * j,int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){
+    return this->getPlateau()->interroger(j,xQuestionneur,yQuestionneur,xInterrogateur,yInterrogateur,this->noir, this->blanc,this->espionNoir, this->espionBlanc);
 }
 
-//TODO
 bool Incognito::verifFinDePartie(){
- // faut faire d'abord la fonction d'interogation
+ // vérifier le nombre de pion si <= 0
+ if (noir <= 0 || blanc <= 0) return true;
+ //verifier si l'espion est toujours la
+ if (espionNoir <= 0 || espionBlanc <= 0) return true;
+ //verifier si l'espion a atteint le chateau de l'adversaire
+ return this->getPlateau()->checkChateau();
 }

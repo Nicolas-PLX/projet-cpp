@@ -238,7 +238,7 @@ bool Plateau::sontVoisinsOrthogonaux(int x1, int y1, int x2, int y2) const {
     return (std::abs(x1 - x2) == 1 && y1 == y2) || (x1 == x2 && std::abs(y1 - y2) == 1);
 }
 
-bool Plateau::interroger(int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){
+bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur, int& noir, int& blanc,int& espnoir, int& espblanc){
     if (!(xQuestionneur >= 0 && xQuestionneur < taille && yQuestionneur >= 0 && yQuestionneur < taille) || !(xInterrogateur >= 0 && xInterrogateur < taille && yInterrogateur >= 0 && yInterrogateur < taille)) {
         std::cout << "Coordonnées invalides." << std::endl;
         return false;
@@ -248,17 +248,48 @@ bool Plateau::interroger(int xQuestionneur, int yQuestionneur, int xInterrogateu
         std::cout << "Les pions ne sont pas voisins orthogonaux." << std::endl;
         return false;
     }
+    //mise a jour du nombre de pion et d'espion 
+
+    int& pion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? noir : blanc;
+    int& espionadv = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? espblanc : espnoir;
+    int& espion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? espnoir : espblanc;
     // Si le pion interrogé est un espion, le questionneur gagne
     if (damier[xInterrogateur][yInterrogateur]->getPiece()->estEspion()) {
         std::cout << "Le questionneur gagne !" << std::endl;
+        espionadv = 0;
         return true;
     }
     // Sinon, le questionneur perd son pion interrogateur
     damier[xQuestionneur][yQuestionneur]->setPiece(nullptr);
+    pion--;
     // Si le pion interrogateur est l'espion du questionneur, le questionneur perd la partie
     if (damier[xQuestionneur][yQuestionneur]->getPiece()->estEspion()) {
         std::cout << "Le questionneur perd la partie !" << std::endl;
+        espion = 0;
         return true;
-    }
+    } 
     return true;
 }
+
+bool Plateau::checkChateau(){
+    // Pour le joueur Noir (espionBlanc atteint le château)
+    if ((damier[taille-2][0]->getPiece() != nullptr && damier[taille-2][0]->getPiece()->estEspion() &&
+    damier[taille-2][0]->getPiece()->getCouleur() == Couleur::Blanc) ||(damier[taille-1][1]->getPiece() != nullptr
+    && damier[taille-1][1]->getPiece()->estEspion() && damier[taille-1][1]->getPiece()->getCouleur() == Couleur::Blanc) )
+    {
+        std::cout << "L'espion Blanc a atteint le château de l'adversaire !" << std::endl;
+        return true;
+    }
+
+    // Pour le joueur Blanc (espionNoir atteint le château)
+    if ((damier[0][taille-2]->getPiece() != nullptr && damier[0][taille-2]->getPiece()->estEspion() &&
+    damier[0][taille-2]->getPiece()->getCouleur() == Couleur::Noir) ||(damier[1][taille-1]->getPiece() != nullptr
+    && damier[1][taille-1]->getPiece()->estEspion() && damier[1][taille-1]->getPiece()->getCouleur() == Couleur::Noir) )
+    {
+        std::cout << "L'espion Noir a atteint le château de l'adversaire !" << std::endl;
+        return true;
+    }
+
+    return false;
+}
+

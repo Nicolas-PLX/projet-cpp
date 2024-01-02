@@ -30,7 +30,8 @@ class Plateau{
     bool deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2);
     bool checkDeplacementIncognito(int x1, int y1, int x2, int y2);
     bool sontVoisinsOrthogonaux(int x1, int y1, int x2, int y2) const;
-    bool interroger(int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur);
+    bool interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur,int& noir, int& blanc,int& espnoir, int& espblanc);
+    bool checkChateau();
 };
 
 std::ostream& operator<<(std::ostream &os, const Plateau& plateau);
