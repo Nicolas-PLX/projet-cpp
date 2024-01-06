@@ -148,24 +148,19 @@ std::ostream& operator<<(std::ostream &out, const Plateau& plateau){
 //Partie Incognito******************************************************************************************
 //Remplir la plateu au début de la partie
 void Plateau::remplirPlateauIncognito(Joueur *j1, Joueur *j2){
-    //remplir les pieces blanches
-    for(int i =0; i < taille; i++){
-        for( int j = i+2; j<i+4 && j< taille; j++){
-            damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
-        }
-    }
-    //le pion blanc
-    damier[0][2]->setPiece(new Piece{Couleur::Blanc,j1,true});
     //remplir les pieces noirs et blanches
-    for(int i =2; i < taille; i++){
-        for( int j = 0; j<i; j++){
-            damier[i][j]->setPiece(new Piece{Couleur::Blanc,j1,false});
-            damier[j][i]->setPiece(new Piece{Couleur::Noir,j2,false});
+   for(int i =2; i < taille; i++){
+        for( int j = 0; j<=i-2 && j<= 2 ;  j++){
+            damier[i][j]->setPiece(new Piece{'B',j1,false});
+            damier[j][i]->setPiece(new Piece{'N',j2,false});
         }
     }
     //le pion noir et blanc
-    damier[2][4]->setPiece(new Piece{Couleur::Blanc,j1,true});
-    damier[2][0]->setPiece(new Piece{Couleur::Noir,j2,true});
+    damier[2][4]->setPiece(new Piece{'N',j1,true});
+    damier[2][0]->setPiece(new Piece{'B',j2,true});
+    //les chateaux
+    damier[0][taille-1]->setPiece(nullptr);
+    damier[taille-1][0]->setPiece(nullptr); 
 }
 
 bool Plateau::deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2){
@@ -250,9 +245,9 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
     }
     //mise a jour du nombre de pion et d'espion 
 
-    int& pion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? noir : blanc;
-    int& espionadv = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? espblanc : espnoir;
-    int& espion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getCouleur() == Couleur::Noir) ? espnoir : espblanc;
+    int& pion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? noir : blanc;
+    int& espionadv = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? espblanc : espnoir;
+    int& espion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? espnoir : espblanc;
     // Si le pion interrogé est un espion, le questionneur gagne
     if (damier[xInterrogateur][yInterrogateur]->getPiece()->estEspion()) {
         std::cout << "Le questionneur gagne !" << std::endl;
@@ -274,8 +269,8 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
 bool Plateau::checkChateau(){
     // Pour le joueur Noir (espionBlanc atteint le château)
     if ((damier[taille-2][0]->getPiece() != nullptr && damier[taille-2][0]->getPiece()->estEspion() &&
-    damier[taille-2][0]->getPiece()->getCouleur() == Couleur::Blanc) ||(damier[taille-1][1]->getPiece() != nullptr
-    && damier[taille-1][1]->getPiece()->estEspion() && damier[taille-1][1]->getPiece()->getCouleur() == Couleur::Blanc) )
+    damier[taille-2][0]->getPiece()->getSymbole() == 'B') ||(damier[taille-1][1]->getPiece() != nullptr
+    && damier[taille-1][1]->getPiece()->estEspion() && damier[taille-1][1]->getPiece()->getSymbole() == 'B') )
     {
         std::cout << "L'espion Blanc a atteint le château de l'adversaire !" << std::endl;
         return true;
@@ -283,8 +278,8 @@ bool Plateau::checkChateau(){
 
     // Pour le joueur Blanc (espionNoir atteint le château)
     if ((damier[0][taille-2]->getPiece() != nullptr && damier[0][taille-2]->getPiece()->estEspion() &&
-    damier[0][taille-2]->getPiece()->getCouleur() == Couleur::Noir) ||(damier[1][taille-1]->getPiece() != nullptr
-    && damier[1][taille-1]->getPiece()->estEspion() && damier[1][taille-1]->getPiece()->getCouleur() == Couleur::Noir) )
+    damier[0][taille-2]->getPiece()->getSymbole() == 'N') ||(damier[1][taille-1]->getPiece() != nullptr
+    && damier[1][taille-1]->getPiece()->estEspion() && damier[1][taille-1]->getPiece()->getSymbole() == 'N') )
     {
         std::cout << "L'espion Noir a atteint le château de l'adversaire !" << std::endl;
         return true;

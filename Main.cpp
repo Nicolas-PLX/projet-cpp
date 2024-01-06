@@ -4,6 +4,7 @@
 #include "header/Piece.hpp"
 #include "header/Dames.hpp"
 #include "header/Partie.hpp"
+#include "header/Incognito.hpp"
 #include <iostream>
 
 using namespace std;
@@ -22,7 +23,8 @@ int main(){
     */
 
    Dames *d = new Dames();
-   Partie *p = new Partie(d,"abc","def");
+   Incognito *i = new Incognito();
+   Partie *p = new Partie(i,"abc","def");
    p->launch();
 
 }
