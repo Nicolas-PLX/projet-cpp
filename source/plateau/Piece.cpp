@@ -3,14 +3,14 @@
 using namespace std;
 
 
-Piece::Piece(char s, Joueur *j, string t) : symbole(s), proprietaire(j), type(t){
+Piece::Piece(char s, Joueur *j, bool e, string t) : symbole(s), proprietaire(j), espion(e), type(t){
     /*
     proprietaire = j;
     symbole = s;
     type = t;*/
 }
 
-Piece::Piece(char s, Joueur *j, bool espion) :symbole(s),proprietaire(j), espion(espion){}
+Piece::Piece(char s, Joueur *j, bool espion) :symbole(s),proprietaire(j), espion(espion){cout << "j'utilise celui là" << endl; type = "";}
 
 
 char Piece::getSymbole() const{

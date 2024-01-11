@@ -25,11 +25,11 @@ void Plateau::remplirPlateauDames(Joueur *j1, Joueur *j2){
         for(int j = 0; j < this->getTaille();j++){
             if(i % 2 == 0){
                 if(j % 2 == 1){
-                    damier[i][j]->setPiece(new Piece{'N',j1,"pion"});
+                    damier[i][j]->setPiece(new Piece{'N',j1,false,"pion"});
                 }
             } else {
                 if(j % 2 == 0){
-                    damier[i][j]->setPiece(new Piece{'N',j1,"pion"});
+                    damier[i][j]->setPiece(new Piece{'N',j1,false,"pion"});
                 }
             }
         }   
@@ -39,11 +39,11 @@ void Plateau::remplirPlateauDames(Joueur *j1, Joueur *j2){
         for(int j = 0; j < this->getTaille();j++){
             if(i % 2 == 0){
                 if(j % 2 == 1){
-                    damier[i][j]->setPiece(new Piece{'B',j2,"pion"});
+                    damier[i][j]->setPiece(new Piece{'B',j2,false,"pion"});
                 }
             } else {
                 if(j % 2 == 0){
-                    damier[i][j]->setPiece(new Piece{'B',j2,"pion"});
+                    damier[i][j]->setPiece(new Piece{'B',j2,false,"pion"});
                 }
             }
         }

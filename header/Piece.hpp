@@ -22,7 +22,7 @@ class Piece {
     bool espion; //pour Incognito
 
     public:
-    Piece(char s, Joueur *j, string t);
+    Piece(char s, Joueur *j, bool e, string t);
     Piece(char s, Joueur *j, bool espion);
     char getSymbole() const;
     Joueur * getProprietaire() const;
