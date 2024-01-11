@@ -155,9 +155,9 @@ void Plateau::remplirPlateauIncognito(Joueur *j1, Joueur *j2){
             damier[j][i]->setPiece(new Piece{'N',j2,false});
         }
     }
-    //le pion noir et blanc
-    damier[2][4]->setPiece(new Piece{'N',j1,true});
-    damier[2][0]->setPiece(new Piece{'B',j2,true});
+    //le espion noir et blanc
+    damier[2][4]->setPiece(new Piece{'N',j2,true});
+    damier[2][0]->setPiece(new Piece{'B',j1,true});
     //les chateaux
     damier[0][taille-1]->setPiece(nullptr);
     damier[taille-1][0]->setPiece(nullptr); 
@@ -176,13 +176,19 @@ bool Plateau::deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2){
         return false;
     }
     //On verifie s'il sagit de son propre pion
-    if (damier[x1][y1]->getPiece() == nullptr || damier[x1][y1]->getPiece()->getProprietaire()->getId() != j->getId()){
+    if (damier[x1][y1]->getPiece() == nullptr 
+    || damier[x1][y1]->getPiece()->getProprietaire()->getId() != j->getId()){
         cout << "Vous n'avez de piece dans la case de depart!" <<endl;
         return false;
     }
     //On verifie si la case d'arrivée est libre
     if(damier[x2][y2]->getPiece() != nullptr){
         cout << "La case d'arrivée est dèja occupée!" <<endl;
+        return false;
+    }
+    //On verifie si la case d'arrivée n'est pas le chateau
+    if((x2 == taille-1 && y2 == 0) || (x2 == 0 && y2 == taille-1)){
+        cout << "La case d'arrivée est un chateau!" <<endl;
         return false;
     }
     //On vérifie si le déplacement est autorisé selon les regles du Incognito
@@ -250,7 +256,7 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
     int& espion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? espnoir : espblanc;
     // Si le pion interrogé est un espion, le questionneur gagne
     if (damier[xInterrogateur][yInterrogateur]->getPiece()->estEspion()) {
-        std::cout << "Le questionneur gagne !" << std::endl;
+        std::cout << "Le questionneur a gagné !" << std::endl;
         espionadv = 0;
         return true;
     }
@@ -259,7 +265,7 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
     pion--;
     // Si le pion interrogateur est l'espion du questionneur, le questionneur perd la partie
     if (damier[xQuestionneur][yQuestionneur]->getPiece()->estEspion()) {
-        std::cout << "Le questionneur perd la partie !" << std::endl;
+        std::cout << "Le questionneur a perdu la partie !" << std::endl;
         espion = 0;
         return true;
     } 
@@ -269,22 +275,21 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
 bool Plateau::checkChateau(){
     // Pour le joueur Noir (espionBlanc atteint le château)
     if ((damier[taille-2][0]->getPiece() != nullptr && damier[taille-2][0]->getPiece()->estEspion() &&
-    damier[taille-2][0]->getPiece()->getSymbole() == 'B') ||(damier[taille-1][1]->getPiece() != nullptr
-    && damier[taille-1][1]->getPiece()->estEspion() && damier[taille-1][1]->getPiece()->getSymbole() == 'B') )
+    damier[taille-2][0]->getPiece()->getSymbole() == 'N') ||(damier[taille-1][1]->getPiece() != nullptr
+    && damier[taille-1][1]->getPiece()->estEspion() && damier[taille-1][1]->getPiece()->getSymbole() == 'N') )
     {
-        std::cout << "L'espion Blanc a atteint le château de l'adversaire !" << std::endl;
+        std::cout << "L'espion Noir a atteint le château de l'adversaire ! " << std::endl;
         return true;
     }
 
     // Pour le joueur Blanc (espionNoir atteint le château)
     if ((damier[0][taille-2]->getPiece() != nullptr && damier[0][taille-2]->getPiece()->estEspion() &&
-    damier[0][taille-2]->getPiece()->getSymbole() == 'N') ||(damier[1][taille-1]->getPiece() != nullptr
-    && damier[1][taille-1]->getPiece()->estEspion() && damier[1][taille-1]->getPiece()->getSymbole() == 'N') )
+    damier[0][taille-2]->getPiece()->getSymbole() == 'B') ||(damier[1][taille-1]->getPiece() != nullptr
+    && damier[1][taille-1]->getPiece()->estEspion() && damier[1][taille-1]->getPiece()->getSymbole() == 'B') )
     {
-        std::cout << "L'espion Noir a atteint le château de l'adversaire !" << std::endl;
+        std::cout << "L'espion Blanc a atteint le château de l'adversaire !" << std::endl;
         return true;
     }
-
     return false;
 }
 

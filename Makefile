@@ -26,6 +26,5 @@ Joueur.o : source/joueur/Joueur.cpp header/Joueur.hpp
 Partie.o : source/Partie.cpp header/Partie.hpp header/Jeux.hpp header/Joueur.hpp header/Dames.hpp header/Incognito.hpp
 	$(CCO)
 
-
 clean : 
-	@rm -f *.o test
+	@rm -f *.o programme

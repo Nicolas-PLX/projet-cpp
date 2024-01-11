@@ -22,10 +22,10 @@ void Partie::launch(){
     while(true){ /* tmp*/
         cout << "Tour " << tour << endl;
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_1 << endl;
+        cout << "Au tour de " << joueur_1->getPseudo() << endl;
         jouerTour(joueur_1);
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_2 << endl;
+        cout << "Au tour de " << joueur_2->getPseudo() << endl;
         jouerTour(joueur_2);
     }
 }
@@ -37,11 +37,9 @@ void Partie::jouerTour(Joueur *j1){
     while(!played){
         string action = "";
         string coords = "";
-        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu" << endl;
+        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter"<< endl;
         cin >> action;
         int num_action = stoi(action);
-
-
         switch(num_action){
             case 1: {
                 cout << "Insérer dans l'ordre suivant : x1 y1 x2 y2" << endl;
@@ -50,13 +48,23 @@ void Partie::jouerTour(Joueur *j1){
 
                 if(type_de_jeu->deplacement(j1,stoi(x1),stoi(y1),stoi(x2),stoi(y2))){
                     played = true;
+                    if(type_de_jeu->verifFinDePartie()){
+                        cout << *type_de_jeu->getPlateau() << endl;
+                        cout << "Fin de la partie"<<endl;
+                        exit(0);
+                    } else{
+                        cout << "Au suivant"<<endl;
+                    }
                 } else {
                     cout << "Erreur : déplacement impossible" << endl;
                 } break;
             }
-                case 2: {
-                cout << type_de_jeu->getPlateau() << endl; break;
-                }
+            case 2: {
+            cout << *type_de_jeu->getPlateau() << endl; break;
+            }
+            case 3:{
+                exit(0); // Cela termine le programme
+            }
 
         }
     }

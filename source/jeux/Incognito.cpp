@@ -20,7 +20,7 @@ bool Incognito::interroger(Joueur * j,int xQuestionneur, int yQuestionneur, int 
 
 bool Incognito::verifFinDePartie(){
  // vérifier le nombre de pion si <= 0
- if (noir <= 0 || blanc <= 0) return true;
+ if ((noir <= 0 && espionNoir <= 0) || (blanc <= 0 && espionBlanc <= 0)) return true;
  //verifier si l'espion est toujours la
  if (espionNoir <= 0 || espionBlanc <= 0) return true;
  //verifier si l'espion a atteint le chateau de l'adversaire

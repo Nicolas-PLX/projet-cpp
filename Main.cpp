@@ -24,7 +24,7 @@ int main(){
 
    Dames *d = new Dames();
    Incognito *i = new Incognito();
-   Partie *p = new Partie(i,"abc","def");
+   Partie *p = new Partie(i,"player1","player2");
    p->launch();
 
 }
