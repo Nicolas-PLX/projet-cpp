@@ -35,16 +35,13 @@ void Partie::launch(){
     finDePartie();
 }
 
-
-
 void Partie::jouerTour(Joueur *j1){
     bool played = false;
     while(!played){
         string action = "";
         string coords = "";
-        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter \n 4. Match Nul"<< endl;
-        //TODO c'est juste pour le test faut améliorer
-        cout << "5. Interoger un pion" <<endl;
+        cout << "Que voulez-vous faire (choisissez le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter \n 4. Match Nul"<< endl;
+        cout << "5. Interoger un pion (Incognito)" <<endl;
         cin >> action;
         int num_action = stoi(action);
         switch(num_action){

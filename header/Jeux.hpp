@@ -9,11 +9,8 @@ class Jeux{
     protected:
     Plateau * plateau;
 
-    
-
     public:
     Jeux(int n);
-
     /*Classe abstraite : Nous n'avons pas besoin d'écrire les méthodes de ces fonctions*/
     virtual Plateau * getPlateau() const;
     virtual void remplirPlateau(Joueur *j1, Joueur *j2) = 0;
@@ -22,6 +19,4 @@ class Jeux{
     virtual bool verifFinDePartie() = 0;
     
 };
-
-
 #endif

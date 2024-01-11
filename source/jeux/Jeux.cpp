@@ -6,8 +6,6 @@ Jeux::Jeux(int n){
     plateau = new Plateau{n};
 }
 
-
-
 Plateau * Jeux::getPlateau() const{
     return plateau;
 }

@@ -3,12 +3,7 @@
 using namespace std;
 
 
-Piece::Piece(char s, Joueur *j, bool e, string t) : symbole(s), proprietaire(j), espion(e), type(t){
-    /*
-    proprietaire = j;
-    symbole = s;
-    type = t;*/
-}
+Piece::Piece(char s, Joueur *j, bool e, string t) : symbole(s), proprietaire(j), espion(e), type(t){}
 
 Piece::Piece(char s, Joueur *j, bool esp) :symbole(s),proprietaire(j), espion(esp){}
 char Piece::getSymbole() const{
@@ -35,14 +30,3 @@ ostream& operator<<(ostream &out, const Piece& piece){
 bool Piece::estEspion() const{
     return espion;
 }
-/*
-Couleur Piece::getCouleur() const{
-    return couleur;
-}
-*/
-/*
-ostream& operator<<(ostream &out, const Piece& pion){
-    out << pion.getCouleur() <<" Espion : "<< pion.estEspion();
-    return out;
-}
-*/

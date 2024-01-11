@@ -6,20 +6,12 @@
 #include <string>
 using namespace std;
 
-/*
-enum class Couleur{
-    Noir,
-    Blanc
-};
-*/
-
 class Piece {
     private:
     char symbole;
     Joueur * proprietaire;
     bool espion ; //pour Incognito
     string type; 
-    //Couleur couleur;
 
     public:
     Piece(char s, Joueur *j, bool e, string t);
@@ -29,12 +21,8 @@ class Piece {
     string getType() const;
     void setType(string s);
     bool estEspion() const;
-    //Couleur getCouleur() const;
 };
 
 std::ostream& operator<<(std::ostream &os, const Piece& piece);
-
-
-
 
 #endif
