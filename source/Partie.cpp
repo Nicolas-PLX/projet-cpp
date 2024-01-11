@@ -28,6 +28,7 @@ void Partie::launch(){
         cout << "Au tour de " << *joueur_2 << endl;
         jouerTour(joueur_2);
     }
+    finDePartie();
 }
 
 
@@ -74,6 +75,23 @@ bool Partie::matchNul(Joueur *j2){
         cin >> rep;
         int num = stoi(rep);
         if (num == 2){return true;} else {return false;}
+}
+
+bool Partie::finDePartie(){
+    Dames * jeuDames = dynamic_cast<Dames *>(type_de_jeu);
+    if(jeuDames){
+        int blanc = jeuDames->getBlanc(); int noir = jeuDames->getNoir();
+        if (blanc <= 0 || noir <= 0){
+            cout << "Fin de partie. Le gagnant est : ";
+            if(blanc <= 0){
+                cout << *joueur_1 << " !!!" << endl;
+            } else {
+                cout << *joueur_2 << " !!!" << endl;
+            }
+            return true;
+        }
+        return false;
+    }
 }
     
 

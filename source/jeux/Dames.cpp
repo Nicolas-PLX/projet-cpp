@@ -7,6 +7,13 @@
 
 Dames::Dames() : Jeux(10){}
 
+int Dames::getNoir(){
+    return noir;
+}
+
+int Dames::getBlanc(){
+    return blanc;
+}
 
 void Dames::remplirPlateau(Joueur *j1, Joueur *j2){
     this->getPlateau()->remplirPlateauDames(j1,j2);
@@ -37,4 +44,5 @@ void Dames::majScore(){
 void Dames::matchNul(){
     noir = 0; blanc = 0;
 }
+
 

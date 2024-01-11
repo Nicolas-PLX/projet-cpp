@@ -24,6 +24,7 @@ class Partie{
     void launch();
     void jouerTour(Joueur *j);
     bool matchNul(Joueur *j2);
+    bool finDePartie();
     
 
 };

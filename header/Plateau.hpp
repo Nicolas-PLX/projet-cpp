@@ -29,6 +29,7 @@ class Plateau{
     void transformationDame(char s,int x,int y);
     bool checkPiece(int x, int y);
     void vidage(vector<Piece *>& vp,vector<pair<int, int>>& coords);
+    vector<pair<int, int>> peutRejouer(Joueur *j, int x, int y, int xp, int yp);
 
 };
 
