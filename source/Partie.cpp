@@ -69,6 +69,7 @@ void Partie::jouerTour(Joueur *j1){
             case 4: {
                     if(matchNul(joueur_2)){
                         type_de_jeu->matchNul();
+                        played = true;
                     }
                 }
 
