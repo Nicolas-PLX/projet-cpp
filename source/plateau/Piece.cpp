@@ -3,10 +3,11 @@
 using namespace std;
 
 
-Piece::Piece(char s, Joueur *j, string t){
+Piece::Piece(char s, Joueur *j, string t) : symbole(s), proprietaire(j), type(t){
+    /*
     proprietaire = j;
     symbole = s;
-    type = t;
+    type = t;*/
 }
 
 Piece::Piece(char s, Joueur *j, bool espion) :symbole(s),proprietaire(j), espion(espion){}

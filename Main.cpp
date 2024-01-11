@@ -21,10 +21,10 @@ int main(){
     cout << p << endl;
     */
 
-   Dames *d = new Dames();
-   Incognito *i = new Incognito();
-   Partie *p = new Partie(i,"player1","player2");
-   p->launch();
+   //Dames *d = new Dames();
+   //Incognito *i = new Incognito();
+   //Partie *p = new Partie(i,"player1","player2");
+   //p->launch();
   // Dames *d = new Dames();
   // Partie *p = new Partie(d,"abc","def");
   // p->launch();
@@ -40,13 +40,14 @@ int main(){
    Piece *p5 = new Piece('B',j2,"pion");
    plat->getDamier()[1][1]->setPiece(p1);
    plat->getDamier()[2][2]->setPiece(p2);
-   plat->getDamier()[2][4]->setPiece(p5);
-   plat->getDamier()[4][4]->setPiece(p3);
-   plat->getDamier()[6][4]->setPiece(p4);
+   //plat->getDamier()[2][4]->setPiece(p5);
+   //plat->getDamier()[4][4]->setPiece(p3);
+   //plat->getDamier()[6][4]->setPiece(p4);
    cout << *plat << endl;
-
-   plat->deplacementDames(j,1,1,3,3);
-   cout << *plat << endl;
-   cout << plat->getDamier()[7][3]->getPiece()->getType() << endl;
+   cout << *p1 << endl;
+   cout << p1->getType() << endl;
+   //plat->deplacementDames(j,1,1,3,3);
+   //cout << *plat << endl;
+   //cout << plat->getDamier()[7][3]->getPiece()->getType() << endl;
 
 }

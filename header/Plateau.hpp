@@ -27,19 +27,21 @@ class Plateau{
     bool checkDeplacementJoueur(int x1, int y1, int x2, int y2);
     void suppressionPiece(vector<Piece *>& vp,int x,int y,vector<pair<int, int>>& coords);
     void transformationDame(char s,int x,int y);
-<<<<<<< HEAD
     void remplirPlateauIncognito(Joueur *j1, Joueur *j2);
     bool deplacementIncognito(Joueur *j, int x1, int y1, int x2, int y2);
     bool checkDeplacementIncognito(int x1, int y1, int x2, int y2);
     bool sontVoisinsOrthogonaux(int x1, int y1, int x2, int y2) const;
     bool interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur,int& noir, int& blanc,int& espnoir, int& espblanc);
     bool checkChateau();
-=======
+
+
     bool checkPiece(int x, int y);
+
+
+    
     void vidage(vector<Piece *>& vp,vector<pair<int, int>>& coords);
     vector<pair<int, int>> peutRejouer(Joueur *j, int x, int y, int xp, int yp);
 
->>>>>>> dames
 };
 
     bool checkSaut(int x1, int y1, int x2, int y2);

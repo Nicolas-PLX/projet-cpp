@@ -64,6 +64,8 @@ bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
     }
     while(!fin_du_tour){        
         cout << a_joue << endl;
+        cout << "fin du tour" << endl;
+        cout << p->getType() << endl;
         if(a_joue && coord_peut_jouer.empty()){ /*Si on a déjà joué et qu'il n'y a plus de déplacement possible, on a fini de se déplacer*/
             fin_du_tour = true;
             char s = damier[x2][y2]->getPiece()->getSymbole();

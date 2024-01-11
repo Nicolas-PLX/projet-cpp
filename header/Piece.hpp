@@ -17,7 +17,7 @@ class Piece {
     private:
     Joueur * proprietaire;
     char symbole;
-    string type; /* Todo : remplacer par un enum ?*/
+    string type; 
     //Couleur couleur;
     bool espion; //pour Incognito
 
