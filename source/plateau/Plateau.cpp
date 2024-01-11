@@ -51,56 +51,169 @@ void Plateau::remplirPlateauDames(Joueur *j1, Joueur *j2){
 }
 
 bool Plateau::deplacementDames(Joueur *j, int x1, int y1, int x2, int y2){
+    vector<Piece *> piece_suppr = vector<Piece *>(); /*Liste des pièces a supprimer*/
+    vector<pair<int, int>> coord_piece_suppr = vector<pair<int, int>>(); //Coordonnées des vecteurs supprimés
+    bool fin_du_tour = false; /* bool qui nous servira à stopper le déplacement si le joueur ne peut plus se déplacer*/
+
+    vector<pair<int,int>> coord_peut_jouer = vector<pair<int, int>>();
+    bool a_joue = false; /* bool qui nous indique si le joueur a déjà joué, et doit continuer de prendre des pièces*/
+
     Piece *p = damier[x1][y1]->getPiece();
     if (p->getProprietaire()->getId() != j->getId()){
-        cout << "je vais ici : false" << endl;
-        return false;
+        return false; // SI la pièce que le joueur essaye de déplacé n'est pas la sienne, return false
     }
-    if (p->getType() == "pion"){
-        cout << "je vais ici aussi : pion" << endl;
-        if(checkDeplacementPion(j,x1,y1,x2,y2)){
-            suppressionPiece(x1,y1,x2,y2);
-            /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
-            damier[x2][y2]->setPiece(p);
-
-            damier[x1][y1]->setPiece(nullptr);
-
+    while(!fin_du_tour){        
+        cout << a_joue << endl;
+        if(a_joue && coord_peut_jouer.empty()){ /*Si on a déjà joué et qu'il n'y a plus de déplacement possible, on a fini de se déplacer*/
+            fin_du_tour = true;
             char s = damier[x2][y2]->getPiece()->getSymbole();
-            transformationDame(s,x2,y2);
+            if(!piece_suppr.empty()){
+                transformationDame(s,x2,y2);
+            }
+        } else {
+            if (a_joue){
+                x1 = x2; y1 = y2;
+                x2 = coord_peut_jouer[0].first; y2 = coord_peut_jouer[0].second;
+                cout << x2 << " " << y2 << endl;
+                coord_peut_jouer.clear();
+            }
+            // Déplacement diagonale ou non
+            int deltaX = x2 - x1;
+            int deltaY = y2 - y1;
+            if(abs(deltaX) != abs(deltaY)){
+            fin_du_tour = true;
+            return false;
+            }
+            if (p->getType() == "pion"){ // On se déplace en fonction du type de pièce que nous avons
+                cout << "je vais ici  pion" << endl;
+                cout << a_joue << endl;
+                if(checkDeplacementPion(j,x1,y1,x2,y2)){
+                    bool prend_pion = checkSaut(x1,y1,x2,y2);
+                    if (prend_pion){
+                        suppressionPiece(piece_suppr,(x1+x2)/2,(y1+y2)/2,coord_piece_suppr);
+                    }
+                    /* Deplacement de la pièce : elle va en [x2,y2], disparait de [x1,y1]*/
+                    damier[x2][y2]->setPiece(p);
+                    damier[x1][y1]->setPiece(nullptr);
+                    a_joue = true;
+                    if (prend_pion){
+                        coord_peut_jouer = peutRejouer(j,x2,y2,(x1+x2)/2,(y1+y2)/2);
+                        if(!coord_peut_jouer.empty()){
+                            /*
+                            x1 = x2; y1 = y2;
+                            x2 = coord_peut_jouer[0].first; y2 = coord_peut_jouer[0].second;
+                            cout << x2 << " " << y2 << endl;
+                            */
+                        } else {
+                            fin_du_tour = true;
+                        }
+                    } else {
+                        fin_du_tour = true;
+                        
+                    }
+                }
+                
+            } else if (p->getType() == "dame"){
+                cout << "je vais ici : dame" << endl;
+                if (checkDeplacementDame(j,x1,y1,x2,y2))
+                {
+                    int directionX =(deltaX > 0) ? 1 : -1;
+                    int directionY = (deltaY > 0) ? 1 : -1;
+                    for (int i = 1; i < abs(deltaX); i++){
+                        int x3 = x1 + i * directionX;
+                        int y3 = y1 + i * directionY;
+                    if (damier[x3][y3]->getPiece() != nullptr){
+                        suppressionPiece(piece_suppr,x3,y3,coord_piece_suppr);
+                    }
+                    damier[x2][y2]->setPiece(p);
+                    damier[x1][y1]->setPiece(nullptr);
 
-            return true;
+                    fin_du_tour = true;
+                    }
+                }           
+            }
         }
         
     }
-    return false;
+    if(!piece_suppr.empty()){
+        vidage(piece_suppr,coord_piece_suppr);
+    }
+    return true;
 }
 
 bool Plateau::checkDeplacementPion(Joueur *j, int x1, int y1, int x2, int y2){
+    if(!checkDeplacementJoueur(x1,y1,x2,y2)){
+        return false;
+    }
     /* Cas où c'est un simple déplacement*/
-    if ((x2 == x1 + 1 && y2 == y1 + 1) // déplacement -> Diagonale Bas Droit
-    || (x2 == x1 +1 && y2 == y1 - 1) // déplacement -> Diagonale Bas Gauche
-    || (x2 == x1 - 1 && y2 == y1 +1) // déplacement -> Diagonale Haut Droit
-    || (x2 == x1 - 1 && y2 == y1 - 1)){ // déplacement -> diagonale Haut Gauche
+    int deltaX = x2 - x1;
+    if(abs(deltaX) == 1){
         if (damier[x2][y2]->getPiece() == nullptr){
             return true;
         }
-    }  
-    /* Cas où nous sautons au dessus d'un autre pion */
-    /* On regarde d'abord si c'est bien un déplacement en diagonale valide*/
-    if ((x2 == x1 + 2 && y2 == y1 + 2) // déplacement -> Diagonale Bas Droit
-    || (x2 == x1 +2 && y2 == y1 - 2) // déplacement -> Diagonale Bas Gauche
-    || (x2 == x1 - 2 && y2 == y1 +2) // déplacement -> Diagonale Haut Droit
-    || (x2 == x1 - 2 && y2 == y1 - 2)){ // déplacement -> diagonale Haut Gauche
-        /* on regarde si la case est vide*/
+
+        /* Cas où le déplacement est un saut*/
+    } else if(abs(deltaX) == 2){
         if (damier[x2][y2]->getPiece() == nullptr){
         /* Puis on regarde si c'est un pion de l'autre joueur */
             if (damier[(x1+x2)/2][(y1+y2)/2]->getPiece()->getProprietaire() != j){
                 return true;
             }
         }
-        
     }
     return false;
+}
+
+bool Plateau::checkDeplacementDame(Joueur *j, int x1, int y1, int x2, int y2){
+    int compteur_pion_adv = 0;
+    /* On regarde si le déplacement est er'cn diagonale*/
+    int deltaX = x2 - x1;
+    int deltaY = y2 - y1;
+    if(abs(deltaX) != abs(deltaY)){
+        return false;
+    }
+    /* Au lieu de faire chaque cas de diagonale, on récupère le sens du déplacement en regardant si on avance vers le haut (x1 > x2) ou vers le bas (x1 < x2)
+        Ensuite, on multipliera par 1 ou -1 pour changé la valeur de l'indice i en fonction du résultat obtenu juste avant, pour pouvoir faire les 4 cas
+        de diagonales en même temps.
+    */
+    int directionX =(deltaX > 0) ? 1 : -1;
+    int directionY = (deltaY > 0) ? 1 : -1;
+
+    /*On regarde s'il n'y a pas de dames amis entre la case de départ et celle de fin*/
+    /* On va aussi compter le nombre de pièce de l'adversaire, il ne peut pas y en avoir plus de 1*/
+    for (int i = 1; i < abs(deltaX); i++){
+        int x3 = x1 + i * directionX;
+        int y3 = y1 + i * directionY;
+        if (damier[x3][y3]->getPiece() != nullptr){
+            if(damier[x3][y3]->getPiece()->getProprietaire()->getId() == j->getId()){
+                return false;
+            } else {
+                compteur_pion_adv++;
+            }
+        }
+    }
+    if (compteur_pion_adv > 1){
+        return false;
+    }
+    if(damier[x2][y2]->getPiece() == nullptr){
+        return true;
+    }
+    return false;
+}
+
+bool Plateau::checkDeplacementJoueur(int x1, int y1, int x2, int y2){ //Un pion d'un joueur ne peut qu'aller tout droit en face de lui
+        //On regarde d'abord la couleur du pion qui essaye d'avancer
+        char s = damier[x1][y1]->getPiece()->getSymbole();
+        if(s == 'N'){ //Cas joueur du haut
+            if (x1 < x2){
+                return true;
+            }
+        } else {
+            if (x1 > x2){
+                return true;
+            }
+        }
+        return false;
 }
 
 void Plateau::transformationDame(char s,int x, int y){
@@ -117,15 +230,128 @@ void Plateau::transformationDame(char s,int x, int y){
     }
 }
 
-void Plateau::suppressionPiece(int x1,int y1,int x2,int y2){
-    Piece *p = damier[(x1+x2)/2][(y1+y2)/2]->getPiece();
-    cout << "je vais ici avant le delete" << endl;
-    cout << *p << endl;
-    if(p != nullptr){
-        cout << "je vais ici : delete" << endl;
-        delete p;
-        //damier[(x1+x2)/2][(y1+y2)/2]->setPiece(nullptr);
+/*Fonction qui regarde s'il y a une pièce à une position donnée*/
+bool Plateau::checkPiece(int x, int y){
+    cout << *damier[x][y]->getPiece()->getProprietaire() << endl;
+    cout << *damier[x][y]->getPiece() << endl;
+    if(damier[x][y]->getPiece()){return true;}
+    return false;
+}
+
+void Plateau::suppressionPiece(vector<Piece *>& vp,int x,int y,vector<pair<int, int>>& coords){
+    Piece *p = damier[x][y]->getPiece();
+    cout << "l'ajout a-t-il été fait ?" << endl;
+    vp.push_back(p);
+    pair<int,int> np(x,y);
+    coords.push_back(np);
+    for(int i = 0; i < coords.size();i++){
+        cout << coords[i].first << " " << coords[i].second << endl;
     }
+  
+}
+
+/* Fonction qui regarde si c'est un saut ou un simple déplacement*/
+bool checkSaut(int x1, int y1, int x2, int y2){
+
+    if ((x2 == x1 + 2 && y2 == y1 + 2) // déplacement -> Diagonale Bas Droit
+    || (x2 == x1 +2 && y2 == y1 - 2) // déplacement -> Diagonale Bas Gauche
+    || (x2 == x1 - 2 && y2 == y1 +2) // déplacement -> Diagonale Haut Droit
+    || (x2 == x1 - 2 && y2 == y1 - 2)){
+        return true;
+    }
+    return false;
+}
+
+void Plateau::vidage(vector<Piece *>& vp, vector<pair<int, int>>& coords){
+    for(Piece *p : vp){
+        delete p;
+    }
+    vp.clear();
+    for(pair<int,int> p : coords){
+        damier[p.first][p.second]->setPiece(nullptr);
+    }
+}
+
+vector<pair<int, int>> Plateau::peutRejouer(Joueur *j, int x, int y, int xp, int yp){
+    vector<pair<int, int>> liste_coords = vector<pair<int, int>>(); /* liste des coordonnées où le joueur peut se déplacer*/
+    Piece *p = damier[x][y]->getPiece();
+    cout << "je vais jusqu'ici" << endl;
+    cout << x << " " << y << " " << xp << " " << yp << endl;
+    cout << x +2 << " " << taille << " " << y +2 << endl;
+    if (p->getType() == "pion"){
+        if(x+2 > 0 && x+2 < taille && y+2 > 0 && y+2 < taille){
+            if(damier[x+2][y+2]->getPiece() == nullptr &&
+             (x+1 != xp || y+1 != yp)){
+                if(damier[x+1][y+1]->getPiece() != nullptr){
+                    if (damier[x+1][y+1]->getPiece()->getProprietaire()->getId() != j->getId()){
+                        pair<int,int> np(x+2,y+2);
+                        liste_coords.push_back(np);
+                        for(int i = 0; i < liste_coords.size();i++){
+                            cout << liste_coords[i].first << " " << liste_coords[i].second << endl;
+                        }
+                    }
+                
+                }
+            }
+        }
+        if(x+2 > 0 && x+2 < taille && y-2 > 0 && y-2 < taille){
+            cout << "je vais la avant de mourir" << endl;
+            cout << x+1 << " "<< y-1 << endl;
+            if(damier[x+1][y-1]->getPiece() == nullptr){
+                cout << "test" << endl;
+            }
+            if(damier[x+2][y-2]->getPiece() == nullptr && (x+1 != xp || y-1 != yp)){
+                cout << "test2" << endl;
+            }
+            if(damier[x+2][y-2]->getPiece() == nullptr && 
+            damier[x+1][y-1]->getPiece() != nullptr &&
+            (x+1 != xp || y-1 != yp)){
+                if( damier[x+1][y-1]->getPiece()->getProprietaire()->getId() != j->getId()){
+                    cout << "je suis ici" << endl;
+                    pair<int,int> np(x+2,y-2);
+                    cout << np.first << " " << np.second << endl;
+                    liste_coords.push_back(np);
+                    for(int i = 0; i < liste_coords.size();i++){
+        cout << liste_coords[i].first << "|2| " << liste_coords[i].second << endl;
+                    }                     
+                }
+            
+                }
+        }
+        if(x-2 > 0 && x-2 < taille && y+2 > 0 && y+2 < taille){
+            if(damier[x-2][y+2]->getPiece() == nullptr &&
+             damier[x-1][y+1]->getPiece() != nullptr &&
+             (x-1 != xp || y+1 != yp)){
+                if(damier[x-1][y+1]->getPiece()->getProprietaire()->getId() != j->getId()){
+                    pair<int,int> np(x-2,y+2);
+                
+                liste_coords.push_back(np);
+                for(int i = 0; i < liste_coords.size();i++){
+        cout << liste_coords[i].first << " |3|" << liste_coords[i].second << endl;
+    }
+
+                }
+               
+                }
+        }
+        if(x-2 > 0 && x-2 < taille && y-2 > 0 && y-2 < taille){
+            if(damier[x-2][y-2]->getPiece() == nullptr &&
+             damier[x-1][y-1]->getPiece() != nullptr &&
+             (x-1 != xp || y-1 != yp)){
+                if(damier[x-1][y-1]->getPiece()->getProprietaire()->getId() != j->getId()){
+                pair<int,int> np(x-2,y-2);
+                
+                liste_coords.push_back(np);
+                for(int i = 0; i < liste_coords.size();i++){
+        cout << liste_coords[i].first << "|4| " << liste_coords[i].second << endl;
+    }
+                }
+                
+                }
+        }
+
+    }
+    return liste_coords;
 }
 
 

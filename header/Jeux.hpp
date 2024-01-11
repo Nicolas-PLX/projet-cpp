@@ -13,10 +13,13 @@ class Jeux{
 
     public:
     Jeux(int n);
-    Plateau * getPlateau() const;
-    virtual void remplirPlateau(Joueur *j1, Joueur *j2);
-    virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2);
-    virtual bool verifFinDePartie();
+
+    /*Classe abstraite : Nous n'avons pas besoin d'écrire les méthodes de ces fonctions*/
+    virtual Plateau * getPlateau() const;
+    virtual void remplirPlateau(Joueur *j1, Joueur *j2) = 0;
+    virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2) = 0;
+    virtual void matchNul() = 0;
+    virtual bool verifFinDePartie() = 0;
     
 };
 

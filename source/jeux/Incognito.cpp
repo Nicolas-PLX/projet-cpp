@@ -26,3 +26,8 @@ bool Incognito::verifFinDePartie(){
  //verifier si l'espion a atteint le chateau de l'adversaire
  return this->getPlateau()->checkChateau();
 }
+
+
+void Incognito::matchNul(){
+    noir = 0; espionNoir = 0; blanc = 0; espionBlanc = 0;
+}

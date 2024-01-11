@@ -19,25 +19,26 @@ Joueur * Partie::getJoueur2() const{
 void Partie::launch(){
     int tour = 1;
     type_de_jeu->remplirPlateau(joueur_1,joueur_2);
-    while(true){ /* tmp*/
+    while(!type_de_jeu->verifFinDePartie()){ /* tmp*/
         cout << "Tour " << tour << endl;
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_1->getPseudo() << endl;
+        cout << "Au tour de " << *joueur_1 << endl;
         jouerTour(joueur_1);
         cout << *type_de_jeu->getPlateau() << endl;
-        cout << "Au tour de " << joueur_2->getPseudo() << endl;
+        cout << "Au tour de " << *joueur_2 << endl;
         jouerTour(joueur_2);
     }
+    finDePartie();
 }
-// TODO : corriger le bug d'affichage lors du déplacement
-// Vérifier que la pièce bouge bien, et non pas qu'elle se reconstruit
-// Ou que ce soit une nouvelle carrément
+
+
+
 void Partie::jouerTour(Joueur *j1){
     bool played = false;
     while(!played){
         string action = "";
         string coords = "";
-        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter"<< endl;
+        cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter \n 4. Match Nul"<< endl;
         cin >> action;
         int num_action = stoi(action);
         switch(num_action){
@@ -65,10 +66,41 @@ void Partie::jouerTour(Joueur *j1){
             case 3:{
                 exit(0); // Cela termine le programme
             }
+            case 4: {
+                    if(matchNul(joueur_2)){
+                        type_de_jeu->matchNul();
+                    }
+                }
 
         }
     }
 }
+
+bool Partie::matchNul(Joueur *j2){
+        cout << "Votre adersaire vous propose un match nul (Insérer le chiffre). \n1. Non    2.Ok" << endl;
+        string rep;
+        cin >> rep;
+        int num = stoi(rep);
+        if (num == 2){return true;} else {return false;}
+}
+
+bool Partie::finDePartie(){
+    Dames * jeuDames = dynamic_cast<Dames *>(type_de_jeu);
+    if(jeuDames){
+        int blanc = jeuDames->getBlanc(); int noir = jeuDames->getNoir();
+        if (blanc <= 0 || noir <= 0){
+            cout << "Fin de partie. Le gagnant est : ";
+            if(blanc <= 0){
+                cout << *joueur_1 << " !!!" << endl;
+            } else {
+                cout << *joueur_2 << " !!!" << endl;
+            }
+            return true;
+        }
+        return false;
+    }
+}
+    
 
 
 

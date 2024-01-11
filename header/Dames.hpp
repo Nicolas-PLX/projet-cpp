@@ -6,14 +6,19 @@
 
 class Dames : public Jeux{
     protected:
-    int noir = 20; //Todo : mettre à jour continuellement pendant la partie
+    int noir = 20;
     int blanc = 20;
 
     public:
     Dames();
-    virtual void remplirPlateau(Joueur *j1, Joueur *j2) override;
-    virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2) override;
-    bool verifFinDePartie();
+    int getNoir();
+    int getBlanc();
+    virtual void remplirPlateau(Joueur *j1, Joueur *j2) ;
+    virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2) ;
+    virtual void matchNul() ;
+    virtual bool verifFinDePartie() ;
+    void majScore(); /* Fonction qui met à jour le score de la partie*/
+    bool peutRejouer(Joueur *j,int x1, int y2);
     
 };
 

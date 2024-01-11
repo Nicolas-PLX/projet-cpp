@@ -19,6 +19,7 @@ class Incognito : public Jeux{
         virtual bool deplacement(Joueur *joueur, int x1, int y1, int x2, int y2) override;
         bool interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur);
         bool verifFinDePartie();
+        virtual void matchNul();
 };
 
 #endif

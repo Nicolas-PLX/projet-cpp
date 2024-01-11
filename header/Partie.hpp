@@ -23,6 +23,8 @@ class Partie{
     Joueur * getJoueur2() const;
     void launch();
     void jouerTour(Joueur *j);
+    bool matchNul(Joueur *j2);
+    bool finDePartie();
     
 
 };
