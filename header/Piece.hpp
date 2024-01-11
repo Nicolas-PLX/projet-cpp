@@ -15,11 +15,11 @@ enum class Couleur{
 
 class Piece {
     private:
-    Joueur * proprietaire;
     char symbole;
+    Joueur * proprietaire;
+    bool espion ; //pour Incognito
     string type; 
     //Couleur couleur;
-    bool espion ; //pour Incognito
 
     public:
     Piece(char s, Joueur *j, bool e, string t);

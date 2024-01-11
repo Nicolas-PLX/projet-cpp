@@ -137,4 +137,5 @@ bool Partie::finDePartie(){
         }
         return false;
     }
+    return false;
 }
