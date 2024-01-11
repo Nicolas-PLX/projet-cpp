@@ -1,4 +1,4 @@
-CPP=g++ --std=c++11 -Wall -lsfml-graphics -lsfml-window -lsfml-system
+CPP=g++ --std=c++11 -Wall 
 CCO= $(CPP) -c $<
 
 OBJECTS = Main.o Plateau.o Case.o Piece.o Jeux.o Dames.o Incognito.o Joueur.o Partie.o

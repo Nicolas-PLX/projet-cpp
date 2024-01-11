@@ -4,6 +4,7 @@
 #include "Jeux.hpp"
 #include "Joueur.hpp"
 #include "Dames.hpp"
+#include "Incognito.hpp"
 #include <sstream>
 #include <string>
 #include <algorithm>

@@ -19,7 +19,7 @@ class Piece {
     char symbole;
     string type; 
     //Couleur couleur;
-    bool espion; //pour Incognito
+    bool espion ; //pour Incognito
 
     public:
     Piece(char s, Joueur *j, bool e, string t);

@@ -10,9 +10,9 @@ Piece::Piece(char s, Joueur *j, bool e, string t) : symbole(s), proprietaire(j),
     type = t;*/
 }
 
-Piece::Piece(char s, Joueur *j, bool espion) :symbole(s),proprietaire(j), espion(espion){cout << "j'utilise celui là" << endl; type = "";}
-
-
+Piece::Piece(char s, Joueur *j, bool espion) :symbole(s),proprietaire(j), espion(espion){
+    type = "";
+}
 char Piece::getSymbole() const{
     return symbole;
 }
