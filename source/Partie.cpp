@@ -43,6 +43,11 @@ void Partie::jouerTour(Joueur *j1){
         cout << "Que voulez-vous faire (choisissez le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter \n 4. Match Nul"<< endl;
         cout << "5. Interoger un pion (Incognito)" <<endl;
         cin >> action;
+        while (!isInteger(action) || stoi(action)<1 || stoi(action)>5)
+        {
+            cout << "Choisissez les actiond de 1 et 5 ?" << endl ;
+            cin >> action;
+        }  
         int num_action = stoi(action);
         switch(num_action){
             case 1: {
