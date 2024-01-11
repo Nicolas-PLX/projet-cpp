@@ -426,8 +426,22 @@ bool Plateau::sontVoisinsOrthogonaux(int x1, int y1, int x2, int y2) const {
 }
 
 bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur, int& noir, int& blanc,int& espnoir, int& espblanc){
-    if (!(xQuestionneur >= 0 && xQuestionneur < taille && yQuestionneur >= 0 && yQuestionneur < taille) || !(xInterrogateur >= 0 && xInterrogateur < taille && yInterrogateur >= 0 && yInterrogateur < taille)) {
+    //Je verifie si les coordonnées sont dans le plateau
+    if (!(xQuestionneur >= 0 && xQuestionneur < taille && yQuestionneur >= 0 && yQuestionneur < taille) ||
+     !(xInterrogateur >= 0 && xInterrogateur < taille && yInterrogateur >= 0 && yInterrogateur < taille)) {
         std::cout << "Coordonnées invalides." << std::endl;
+        return false;
+    }
+    //On verifie s'il a un pion dans la case de depart
+    if (damier[xQuestionneur][yQuestionneur]->getPiece() == nullptr 
+    || damier[xQuestionneur][yQuestionneur]->getPiece()->getProprietaire()->getId() != j->getId()){
+        cout << "Vous n'avez de piece dans la case de depart!" <<endl;
+        return false;
+    }
+    //On verfie si la case cible a un pion de l'adversaire
+    if (damier[xInterrogateur][yInterrogateur]->getPiece() == nullptr 
+    || damier[xInterrogateur][yInterrogateur]->getPiece()->getProprietaire()->getId() == j->getId()){
+        cout << "Votre adversaire n'a pas de piece dans la case ciblée!" <<endl;
         return false;
     }
     // Vérifier si les pions sont voisins orthogonaux
@@ -436,25 +450,24 @@ bool Plateau::interroger(Joueur * j, int xQuestionneur, int yQuestionneur, int x
         return false;
     }
     //mise a jour du nombre de pion et d'espion 
-
-    int& pion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? noir : blanc;
-    int& espionadv = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? espblanc : espnoir;
-    int& espion = (damier[xQuestionneur][xQuestionneur]->getPiece()->getSymbole() == 'N') ? espnoir : espblanc;
+    int &pion = (damier[xQuestionneur][yQuestionneur]->getPiece()->getSymbole() == 'N') ? noir : blanc;
+    int &espionadv = (damier[xQuestionneur][yQuestionneur]->getPiece()->getSymbole() == 'N') ? espblanc : espnoir;
+    int &espion = (damier[xQuestionneur][yQuestionneur]->getPiece()->getSymbole() == 'N') ? espnoir : espblanc;
     // Si le pion interrogé est un espion, le questionneur gagne
     if (damier[xInterrogateur][yInterrogateur]->getPiece()->estEspion()) {
         std::cout << "Le questionneur a gagné !" << std::endl;
         espionadv = 0;
         return true;
     }
-    // Sinon, le questionneur perd son pion interrogateur
-    damier[xQuestionneur][yQuestionneur]->setPiece(nullptr);
-    pion--;
     // Si le pion interrogateur est l'espion du questionneur, le questionneur perd la partie
-    if (damier[xQuestionneur][yQuestionneur]->getPiece()->estEspion()) {
+     if (damier[xQuestionneur][yQuestionneur]->getPiece()->estEspion()) {
         std::cout << "Le questionneur a perdu la partie !" << std::endl;
         espion = 0;
         return true;
     } 
+    // Sinon, le questionneur perd son pion interrogateur
+    damier[xQuestionneur][yQuestionneur]->setPiece(nullptr);
+    pion--;
     return true;
 }
 

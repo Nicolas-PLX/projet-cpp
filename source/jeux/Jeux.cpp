@@ -24,3 +24,8 @@ bool Jeux::verifFinDePartie(){ //todo
     return false;
 }
 
+bool Jeux::interroger(Joueur * j,int xQuestionneur, int yQuestionneur, int xInterrogateur, int yInterrogateur){ //todo
+        return false;
+}
+
+

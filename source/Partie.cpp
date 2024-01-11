@@ -2,6 +2,10 @@
 
 Partie::Partie(){}
 
+bool isInteger(const string &str) {
+    return !str.empty() && find_if(str.begin(), str.end(), [](char c) { return !isdigit(c); }) == str.end();
+}
+
 Partie::Partie(Jeux *j,string ps1, string ps2){
     type_de_jeu = j;
     joueur_1 = new Joueur{ps1,1};
@@ -39,6 +43,8 @@ void Partie::jouerTour(Joueur *j1){
         string action = "";
         string coords = "";
         cout << "Que voulez-vous faire (choisir le chiffre) ?" << endl << "1. Déplacer une pièce \n 2. Print : Affiche le plateau de jeu \n 3.Quitter \n 4. Match Nul"<< endl;
+        //TODO c'est juste pour le test faut améliorer
+        cout << "5. Interoger un pion" <<endl;
         cin >> action;
         int num_action = stoi(action);
         switch(num_action){
@@ -46,25 +52,56 @@ void Partie::jouerTour(Joueur *j1){
                 cout << "Insérer dans l'ordre suivant : x1 y1 x2 y2" << endl;
                 string x1,y1,x2,y2;
                 cin >> x1; cin >> y1; cin >> x2; cin >> y2;
-
-                if(type_de_jeu->deplacement(j1,stoi(x1),stoi(y1),stoi(x2),stoi(y2))){
-                    played = true;
-                    if(type_de_jeu->verifFinDePartie()){
-                        cout << *type_de_jeu->getPlateau() << endl;
-                        cout << "Fin de la partie"<<endl;
-                        exit(0);
-                    } else{
-                        cout << "Au suivant"<<endl;
-                    }
+                if(isInteger(x1) && isInteger(y1) && isInteger(x2) && isInteger(y2)){
+                    if(type_de_jeu->deplacement(j1,stoi(x1),stoi(y1),stoi(x2),stoi(y2))){
+                        played = true;
+                        if(type_de_jeu->verifFinDePartie()){
+                            cout << *type_de_jeu->getPlateau() << endl;
+                            cout << "Fin de la partie"<<endl;
+                            exit(0);
+                        }
+                    } else {
+                        cout << "Erreur : déplacement impossible" << endl;
+                    } break;
                 } else {
-                    cout << "Erreur : déplacement impossible" << endl;
-                } break;
+                    cout << "Erreur : les coordonnées doivent être des entiers" << endl;
+                }
+                break;
             }
             case 2: {
-            cout << *type_de_jeu->getPlateau() << endl; break;
+            cout << *type_de_jeu->getPlateau() << endl;
+            break;
             }
             case 3:{
+                cout << "Au revoir :)"<<endl;
                 exit(0); // Cela termine le programme
+                break;
+            }
+            case 5:{
+                cout << "Insérer dans l'ordre suivant : x1 y1 x2 y2" << endl;
+                string x1,y1,x2,y2;
+                cin >> x1; cin >> y1; cin >> x2; cin >> y2;
+                if(!isInteger(x1) || !isInteger(y1) || !isInteger(x2) || !isInteger(y2)){
+                    cout << "Erreur : les coordonnées doivent être des entiers" << endl;
+                }
+                else {
+                    Incognito * jeuIncognito = dynamic_cast<Incognito *>(type_de_jeu);
+                    if(jeuIncognito){
+                        if(jeuIncognito->interroger(j1,stoi(x1),stoi(y1),stoi(x2),stoi(y2))){
+                            played = true;
+                            if(type_de_jeu->verifFinDePartie()){
+                                cout << *type_de_jeu->getPlateau() << endl;
+                                cout << "Fin de la partie"<<endl;
+                                exit(0);
+                            } else{
+                                cout << "Au suivant"<<endl;
+                            }
+                        } else {
+                            cout << "Erreur : interrogation impossible" << endl;
+                        } 
+                    }
+                } 
+                break;
             }
             case 4: {
                     if(matchNul(joueur_2)){
@@ -101,9 +138,3 @@ bool Partie::finDePartie(){
         return false;
     }
 }
-    
-
-
-
-
-
